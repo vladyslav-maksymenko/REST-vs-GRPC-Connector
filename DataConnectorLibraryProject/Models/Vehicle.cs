@@ -1,8 +1,10 @@
-﻿namespace DataConnectorLibraryProject.Models
+﻿using DataConnectorLibraryProject.Interface;
+
+namespace DataConnectorLibraryProject.Models
 {
-    internal class Vehicle
+    internal class Vehicle : IEntity
     {
-        public Guid VehicleId { get; set; }
+        public Guid Id { get; set; }
         public string PhoneNumber { get; set; }
         public string BrandVehicle { get; set; }
         public DateTime ExecutionDate { get; set; }

@@ -1,8 +1,10 @@
-﻿namespace DataConnectorLibraryProject.Models
+﻿using DataConnectorLibraryProject.Interface;
+
+namespace DataConnectorLibraryProject.Models
 {
-    internal class Employee
+    internal class Employee : IEntity
     {
-        public Guid EmployeeId { get; set; }
+        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Patronymic { get; set; }

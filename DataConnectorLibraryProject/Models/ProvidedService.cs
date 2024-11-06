@@ -1,8 +1,10 @@
-﻿namespace DataConnectorLibraryProject.Models
+﻿using DataConnectorLibraryProject.Interface;
+
+namespace DataConnectorLibraryProject.Models
 {
-    internal class ProvidedService
+    internal class ProvidedService : IEntity
     {
-        public Guid ProvidedServiceId { get; set; }
+        public Guid Id { get; set; }
         public Guid ServiceId { get; set; }
         public Service Service { get; set; }
         public Guid PerformerId { get; set; }

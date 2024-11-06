@@ -1,8 +1,10 @@
-﻿namespace DataConnectorLibraryProject.Models
+﻿using DataConnectorLibraryProject.Interface;
+
+namespace DataConnectorLibraryProject.Models
 {
-    internal class Customer()
+    internal class Customer : IEntity
     {
-        public Guid CustomerId { get; init; }
+        public Guid Id { get; set; }
         public string CustomerName { get; init; }
         public string EdpouCode { get; init; }
         public string FirstName { get; init; }

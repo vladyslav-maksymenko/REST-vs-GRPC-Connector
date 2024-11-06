@@ -1,8 +1,10 @@
-﻿namespace DataConnectorLibraryProject.Models
+﻿using DataConnectorLibraryProject.Interface;
+
+namespace DataConnectorLibraryProject.Models
 {
-    internal class Performer
+    internal class Performer : IEntity
     {
-        public Guid PerformerId { get; set; }
+        public Guid Id { get; set; }
         public string PerfomerName { get; set; }
         public string EdpouCode { get; set; }
         public ICollection<Employee> Employees { get; set; }
