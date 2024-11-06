@@ -2,7 +2,7 @@
 
 namespace DataConnectorLibraryProject.Interface
 {
-    internal interface IRepository<TEntity> where TEntity : class
+    internal interface IRepository<TEntity> where TEntity : class, IEntity
     {
         Task<TEntity?> GetByIdAsync(Guid Id);
         Task AddAsync(TEntity entity);
