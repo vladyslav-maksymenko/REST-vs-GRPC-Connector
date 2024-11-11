@@ -2,7 +2,7 @@
 
 namespace DataConnectorLibraryProject.DataAccess.Data
 {
-    internal class MongoDataConnectorDbContext : DbContext
+    public class MongoDataConnectorDbContext : DbContext
     {
 
     }

@@ -3,6 +3,6 @@
     internal interface IUnitOfWork : IDisposable
     {
         IRepository<TEntity> GetRepository<TEntity>(Type entryType) where TEntity : class, IEntity;
-        Task SaveAsync();
+        Task SaveShangesAsync();
     }
 }

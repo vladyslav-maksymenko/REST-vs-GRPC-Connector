@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using DataConnectorLibraryProject.Extensions;
 using System.Linq.Expressions;
+using DataConnectorLibraryProject.RepositoryWrapper;
 
 namespace DataConnectorLibraryProject.Repository
 {
-    internal class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
+    internal class Repository<TEntity> : IRepository<TEntity>, IRepositoryWrapper
+        where TEntity : class, IEntity
     {
         private readonly DbContext dbContext;
         private readonly DbSet<TEntity> dbSet;
@@ -24,18 +26,18 @@ namespace DataConnectorLibraryProject.Repository
 
         public async Task AddAsync(TEntity entity) => await dbSet.AddAsync(entity);
  
-        public async Task DeleteAsync(Guid Id)
+        public async Task DeleteAsync(Guid id)
         {
-            var entity = await dbSet.FirstOrDefaultAsync(x => x.Id == Id);
+            var entity = await dbSet.FirstOrDefaultAsync(x => x.Id == id);
             if (entity != null)
             {
                 dbSet.Remove(entity);
             }
         }
 
-        public async Task<TEntity?> GetByIdAsync(Guid Id) 
+        public async Task<TEntity?> GetByIdAsync(Guid id) 
         {
-            var entity = await dbSet.IncludeIncludes(includeExpressions).SingleOrDefaultAsync(x => x.Id == Id);
+            var entity = await dbSet.IncludeIncludes(includeExpressions).SingleOrDefaultAsync(x => x.Id == id);
             return entity ?? throw new KeyNotFoundException("Entity not found");
         } 
 
@@ -48,10 +50,12 @@ namespace DataConnectorLibraryProject.Repository
             }
         }
 
-        private IRepository<TEntity> IncludeProperty(Expression<Func<TEntity, object>> includeExpression)
+        public IRepository<TEntity> IncludeProperty(Expression<Func<TEntity, object>> includeExpression)
         {
             includeExpressions.Add(includeExpression);
             return this;
         }
+
+        public Type EntityType  => typeof(TEntity);
     }
 }
