@@ -2,9 +2,9 @@
 
 namespace DataConnectorLibraryProject.Models
 {
-    internal class Equipment : IEntity
+    public class Equipment : IEntity
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } 
         public string EquipmentName { get; set; }
         public double PriceEquipment { get; set; }
         public string PriceEquipmentWithPdv { get; set; }

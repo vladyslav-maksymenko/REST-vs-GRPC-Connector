@@ -22,6 +22,7 @@ namespace DataConnectorLibraryProject.DataAccess.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            SetupAutoGenerationEntityIds(modelBuilder);
 
             modelBuilder.Entity<Employee>()
                 .HasOne(x => x.Position)
@@ -85,6 +86,46 @@ namespace DataConnectorLibraryProject.DataAccess.Data
             {
                 optionsBuilder.UseSqlServer("ConnectionForSqlDb");
             }
+        }
+
+        private void SetupAutoGenerationEntityIds(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Customer>()
+                .Property(c => c.Id)
+                .HasDefaultValueSql("newsequentialid()");
+            
+            modelBuilder.Entity<Employee>()
+                .Property(c => c.Id)
+                .HasDefaultValueSql("newsequentialid()");
+            
+            modelBuilder.Entity<Performer>()
+                .Property(c => c.Id)
+                .HasDefaultValueSql("newsequentialid()");
+            
+            modelBuilder.Entity<Position>()
+                .Property(c => c.Id)
+                .HasDefaultValueSql("newsequentialid()");
+            
+            modelBuilder.Entity<ProvidedService>()
+                .Property(c => c.Id)
+                .HasDefaultValueSql("newsequentialid()");
+            
+            modelBuilder.Entity<Service>()
+                .Property(c => c.Id)
+                .HasDefaultValueSql("newsequentialid()");
+            
+            modelBuilder.Entity<TypeVehicle>()
+                .Property(c => c.Id)
+                .HasDefaultValueSql("newsequentialid()");
+            
+            modelBuilder.Entity<Vehicle>()
+                .Property(c => c.Id)
+                .HasDefaultValueSql("newsequentialid()");
+            
+            modelBuilder.Entity<Equipment>()
+                .Property(c => c.Id)
+                .HasDefaultValueSql("newsequentialid()");
+        
         }
     }
 }

@@ -6,7 +6,7 @@ namespace DataConnectorLibraryProject.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public DbAccessStrategies dbAccessStrategies { get; private set;}
+        public DbAccessStrategies DbContexts { get; private set;}
         private IDatabaseStrategy curentStrategy;
         private bool disposed = false;
 
@@ -14,28 +14,29 @@ namespace DataConnectorLibraryProject.UnitOfWork
             SqlDataConnectorDbContext sqlDataConnectorDbContext,
             MongoDataConnectorDbContext mongoDataConnectorDbContext)
         {
-            dbAccessStrategies = new DbAccessStrategies(sqlDataConnectorDbContext, mongoDataConnectorDbContext);
+            DbContexts = new DbAccessStrategies(sqlDataConnectorDbContext, mongoDataConnectorDbContext);
+            curentStrategy = DbContexts.Sql(); // Default strategy.
         }
         
-
-        public IRepository<TEntity> GetRepository<TEntity>(Type entryType) where TEntity : class, IEntity
+        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class, IEntity
         {
             return curentStrategy.GetRepository<TEntity>();
         }
 
         public async Task SaveShangesAsync()
         {
-            await dbAccessStrategies.Sql().SaveShangesAsync();
-            await dbAccessStrategies.Mongo().SaveShangesAsync();
+            await DbContexts.Sql().SaveShangesAsync();
+            await DbContexts.Mongo().SaveShangesAsync();
         }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposed)
             {
                 if (disposing)
                 {
-                    dbAccessStrategies.Sql()?.Dispose();
-                    dbAccessStrategies.Mongo()?.Dispose();
+                    DbContexts.Sql()?.Dispose();
+                    DbContexts.Mongo()?.Dispose();
                 }
                 disposed = true;
             }
@@ -47,8 +48,13 @@ namespace DataConnectorLibraryProject.UnitOfWork
             GC.SuppressFinalize(this);
         }
 
-        public void SwitchStrategy(IDatabaseStrategy strategy)
+        public void SwitchContext(IDatabaseStrategy strategy)
         {
+            if (curentStrategy == null) //Dev point.
+            {
+                throw new InvalidOperationException("Database context has not been switched. Call 'SwitchContext' first.");
+            }
+
             curentStrategy = strategy;
         }
     }

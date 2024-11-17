@@ -5,15 +5,15 @@ namespace DataConnectorLibraryProject.Extensions
 {
     internal static class DbSetExtensions
     {
-        public static IQueryable<TEntity> IncludeIncludes<TEntity>(this DbSet<TEntity> dbSet, List<Expression<Func<TEntity, object>>> includeExpressions)
+        public static IQueryable<TEntity> IncludeIncludes<TEntity>(this IQueryable<TEntity> query, List<Expression<Func<TEntity, object>>> includeExpressions)
             where TEntity : class
         {
             if (includeExpressions == null || !includeExpressions.Any())
             {
-                return dbSet;
+                return query;
             }
 
-            return includeExpressions.Aggregate(dbSet.AsQueryable(), (current, includeExpression) => current.Include(includeExpression));
+            return includeExpressions.Aggregate(query, (current, includeExpression) => current.Include(includeExpression));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DataConnectorLibraryProject.Models;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace DataConnectorLibraryProject.DataAccess.Data
@@ -9,7 +10,7 @@ namespace DataConnectorLibraryProject.DataAccess.Data
         public MongoDataConnectorDbContext(DbContextOptions<MongoDataConnectorDbContext> options) : base(options)
         {
         }
-        
+
         internal DbSet<Customer> Customers { get; set; }
         internal DbSet<Employee> Employees { get; set; }
         internal DbSet<Equipment> Equipments { get; set; }
@@ -22,7 +23,7 @@ namespace DataConnectorLibraryProject.DataAccess.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Customer>().ToCollection("customer");
+            modelBuilder.Entity<Customer>().ToCollection("Customer");
             modelBuilder.Entity<Employee>().ToCollection("employee");
             modelBuilder.Entity<Equipment>().ToCollection("equipment");
             modelBuilder.Entity<Performer>().ToCollection("performer");

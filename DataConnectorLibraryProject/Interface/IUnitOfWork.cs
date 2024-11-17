@@ -1,8 +1,12 @@
-﻿namespace DataConnectorLibraryProject.Interface
+﻿using DataConnectorLibraryProject.DatabaseStrategy;
+
+namespace DataConnectorLibraryProject.Interface
 {
-    internal interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork : IDisposable
     {
-        IRepository<TEntity> GetRepository<TEntity>(Type entryType) where TEntity : class, IEntity;
+        IRepository<TEntity> GetRepository<TEntity>() where TEntity : class, IEntity;
         Task SaveShangesAsync();
+        void SwitchContext(IDatabaseStrategy strategy);
+        DbAccessStrategies DbContexts { get; }
     }
 }

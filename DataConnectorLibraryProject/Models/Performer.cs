@@ -2,9 +2,9 @@
 
 namespace DataConnectorLibraryProject.Models
 {
-    internal class Performer : IEntity
+    public class Performer : IEntity
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } 
         public string PerfomerName { get; set; }
         public string EdpouCode { get; set; }
         public ICollection<Employee> Employees { get; set; }

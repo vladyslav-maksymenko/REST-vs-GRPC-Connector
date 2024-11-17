@@ -20,7 +20,5 @@ namespace DataConnectorLibraryProject.DatabaseStrategy
         public SqlDatabaseStrategy Sql() => sqlInstance ?? (sqlInstance = new(sqlDataConnectorDbContext));
 
         public MongoDatabaseStrategy Mongo() => mongoInstance ?? (mongoInstance = new(mongoDataConnectorDbContext));
-        
-        
     }
 }

@@ -4,6 +4,7 @@ using DataConnectorLibraryProject.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataConnectorLibraryProject.Migrations
 {
     [DbContext(typeof(SqlDataConnectorDbContext))]
-    partial class SqlDataConnectorDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241116112333_AddAutoGenerationIds")]
+    partial class AddAutoGenerationIds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

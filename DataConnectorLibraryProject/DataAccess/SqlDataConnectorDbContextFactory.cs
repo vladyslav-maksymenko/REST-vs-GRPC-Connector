@@ -1,4 +1,5 @@
-﻿using DataConnectorLibraryProject.DataAccess.Data;
+﻿/*
+using DataConnectorLibraryProject.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -22,3 +23,4 @@ namespace DataConnectorLibraryProject.DataAccess
         }
     }
 }
+*/

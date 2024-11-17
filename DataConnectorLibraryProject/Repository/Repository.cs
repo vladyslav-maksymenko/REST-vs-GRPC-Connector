@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using DataConnectorLibraryProject.Extensions;
 using System.Linq.Expressions;
+using DataConnectorLibraryProject.DataAccess.Data;
 using DataConnectorLibraryProject.RepositoryWrapper;
 
 namespace DataConnectorLibraryProject.Repository
@@ -16,12 +17,19 @@ namespace DataConnectorLibraryProject.Repository
         {
             dbSet = dbContext.Set<TEntity>();
             this.dbContext = dbContext;
-            includeExpressions = new List<Expression<Func<TEntity, object>>>();
+            includeExpressions = new();
         }
 
-        public async Task<IList<TEntity>> GetAllAsync() 
+        public async Task<IList<TEntity>> GetAllAsync()
         {
-            return await dbSet.IncludeIncludes(includeExpressions).ToListAsync();
+            
+            var query = dbSet.AsQueryable();
+            if (dbContext is SqlDataConnectorDbContext)
+            {
+                query = query.IncludeIncludes(includeExpressions);
+            }
+
+            return await dbSet.ToListAsync();
         }
 
         public async Task AddAsync(TEntity entity) => await dbSet.AddAsync(entity);
@@ -35,11 +43,16 @@ namespace DataConnectorLibraryProject.Repository
             }
         }
 
-        public async Task<TEntity?> GetByIdAsync(Guid id) 
+        public async Task<TEntity?> GetByIdAsync(Guid id)
         {
-            var entity = await dbSet.IncludeIncludes(includeExpressions).SingleOrDefaultAsync(x => x.Id == id);
-            return entity ?? throw new KeyNotFoundException("Entity not found");
-        } 
+            var query = dbSet.AsQueryable();
+            if (dbContext is SqlDataConnectorDbContext)
+            {
+                query = query.IncludeIncludes(includeExpressions);
+            }
+
+            return await query.SingleOrDefaultAsync(x => x.Id == id);
+        }
 
         public async Task UpdateAsync(TEntity entity, bool saveImmediately = false)
         {
