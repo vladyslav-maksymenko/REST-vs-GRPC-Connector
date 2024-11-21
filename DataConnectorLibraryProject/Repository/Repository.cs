@@ -29,12 +29,12 @@ namespace DataConnectorLibraryProject.Repository
                 query = query.IncludeIncludes(includeExpressions);
             }
 
-            return await dbSet.ToListAsync();
+            return await query.ToListAsync();
         }
 
         public async Task AddAsync(TEntity entity) => await dbSet.AddAsync(entity);
  
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(string id)
         {
             var entity = await dbSet.FirstOrDefaultAsync(x => x.Id == id);
             if (entity != null)
@@ -43,7 +43,7 @@ namespace DataConnectorLibraryProject.Repository
             }
         }
 
-        public async Task<TEntity?> GetByIdAsync(Guid id)
+        public async Task<TEntity?> GetByIdAsync(string id)
         {
             var query = dbSet.AsQueryable();
             if (dbContext is SqlDataConnectorDbContext)

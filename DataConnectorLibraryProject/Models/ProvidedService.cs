@@ -1,15 +1,17 @@
-﻿using DataConnectorLibraryProject.Interface;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using DataConnectorLibraryProject.Interface;
 
 namespace DataConnectorLibraryProject.Models
 {
     public class ProvidedService : IEntity
     {
-        public Guid Id { get; set; } 
-        public Guid ServiceId { get; set; }
+        public string Id { get; set; } 
+        public string ServiceId { get; set; }
         public Service Service { get; set; }
-        public Guid PerformerId { get; set; }
+        public string PerformerId { get; set; }
         public Performer Performer { get; set; }
-        public Guid VehicleId { get; set; }
+        public string VehicleId { get; set; }
         public Vehicle Vehicle { get; set; }
         public DateTime ExecutionDate { get; set; }
     }

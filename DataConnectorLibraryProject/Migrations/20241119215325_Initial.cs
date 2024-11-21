@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataConnectorLibraryProject.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,144 +15,144 @@ namespace DataConnectorLibraryProject.Migrations
                 name: "Performers",
                 columns: table => new
                 {
-                    PerformerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PerfomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EdpouCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Performers", x => x.PerformerId);
+                    table.PrimaryKey("PK_Performers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Positions",
                 columns: table => new
                 {
-                    PositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PositionName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Positions", x => x.PositionId);
+                    table.PrimaryKey("PK_Positions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Services",
                 columns: table => new
                 {
-                    ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ServiceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ServicePrice = table.Column<double>(type: "float", nullable: false),
                     ServicePriceWithPdv = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Services", x => x.ServiceId);
+                    table.PrimaryKey("PK_Services", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "TypeVehicles",
                 columns: table => new
                 {
-                    TypeVehicleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TypeVehicles", x => x.TypeVehicleId);
+                    table.PrimaryKey("PK_TypeVehicles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
-                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EdpouCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Patronymic = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    PositionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.CustomerId);
+                    table.PrimaryKey("PK_Customers", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Customers_Positions_PositionId",
                         column: x => x.PositionId,
                         principalTable: "Positions",
-                        principalColumn: "PositionId");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
                 {
-                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Patronymic = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IpnCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    PositionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employees", x => x.EmployeeId);
+                    table.PrimaryKey("PK_Employees", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Employees_Positions_PositionId",
                         column: x => x.PositionId,
                         principalTable: "Positions",
-                        principalColumn: "PositionId");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Vehicles",
                 columns: table => new
                 {
-                    VehicleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BrandVehicle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ExecutionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StateNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TypeVehicleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    TypeVehicleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vehicles", x => x.VehicleId);
+                    table.PrimaryKey("PK_Vehicles", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Vehicles_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "CustomerId");
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Vehicles_TypeVehicles_TypeVehicleId",
                         column: x => x.TypeVehicleId,
                         principalTable: "TypeVehicles",
-                        principalColumn: "TypeVehicleId");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "CustomerEmployee",
                 columns: table => new
                 {
-                    CustomersCustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EmployeesEmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    CustomersId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EmployeesId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CustomerEmployee", x => new { x.CustomersCustomerId, x.EmployeesEmployeeId });
+                    table.PrimaryKey("PK_CustomerEmployee", x => new { x.CustomersId, x.EmployeesId });
                     table.ForeignKey(
-                        name: "FK_CustomerEmployee_Customers_CustomersCustomerId",
-                        column: x => x.CustomersCustomerId,
+                        name: "FK_CustomerEmployee_Customers_CustomersId",
+                        column: x => x.CustomersId,
                         principalTable: "Customers",
-                        principalColumn: "CustomerId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CustomerEmployee_Employees_EmployeesEmployeeId",
-                        column: x => x.EmployeesEmployeeId,
+                        name: "FK_CustomerEmployee_Employees_EmployeesId",
+                        column: x => x.EmployeesId,
                         principalTable: "Employees",
-                        principalColumn: "EmployeeId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -160,23 +160,23 @@ namespace DataConnectorLibraryProject.Migrations
                 name: "EmployeePerformer",
                 columns: table => new
                 {
-                    EmployeesEmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PerformersPerformerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    EmployeesId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PerformersId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmployeePerformer", x => new { x.EmployeesEmployeeId, x.PerformersPerformerId });
+                    table.PrimaryKey("PK_EmployeePerformer", x => new { x.EmployeesId, x.PerformersId });
                     table.ForeignKey(
-                        name: "FK_EmployeePerformer_Employees_EmployeesEmployeeId",
-                        column: x => x.EmployeesEmployeeId,
+                        name: "FK_EmployeePerformer_Employees_EmployeesId",
+                        column: x => x.EmployeesId,
                         principalTable: "Employees",
-                        principalColumn: "EmployeeId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EmployeePerformer_Performers_PerformersPerformerId",
-                        column: x => x.PerformersPerformerId,
+                        name: "FK_EmployeePerformer_Performers_PerformersId",
+                        column: x => x.PerformersId,
                         principalTable: "Performers",
-                        principalColumn: "PerformerId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -184,7 +184,7 @@ namespace DataConnectorLibraryProject.Migrations
                 name: "Equipments",
                 columns: table => new
                 {
-                    EquipmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     EquipmentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PriceEquipment = table.Column<double>(type: "float", nullable: false),
                     PriceEquipmentWithPdv = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -192,52 +192,52 @@ namespace DataConnectorLibraryProject.Migrations
                     IMEIDRP = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ModelDRP = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ModelRT = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VehicleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    VehicleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Equipments", x => x.EquipmentId);
+                    table.PrimaryKey("PK_Equipments", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Equipments_Vehicles_VehicleId",
                         column: x => x.VehicleId,
                         principalTable: "Vehicles",
-                        principalColumn: "VehicleId");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "ProvidedServices",
                 columns: table => new
                 {
-                    ProvidedServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PerformerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    VehicleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ServiceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PerformerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    VehicleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ExecutionDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProvidedServices", x => x.ProvidedServiceId);
+                    table.PrimaryKey("PK_ProvidedServices", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ProvidedServices_Performers_PerformerId",
                         column: x => x.PerformerId,
                         principalTable: "Performers",
-                        principalColumn: "PerformerId");
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ProvidedServices_Services_ServiceId",
                         column: x => x.ServiceId,
                         principalTable: "Services",
-                        principalColumn: "ServiceId");
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ProvidedServices_Vehicles_VehicleId",
                         column: x => x.VehicleId,
                         principalTable: "Vehicles",
-                        principalColumn: "VehicleId");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomerEmployee_EmployeesEmployeeId",
+                name: "IX_CustomerEmployee_EmployeesId",
                 table: "CustomerEmployee",
-                column: "EmployeesEmployeeId");
+                column: "EmployeesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Customers_PositionId",
@@ -245,9 +245,9 @@ namespace DataConnectorLibraryProject.Migrations
                 column: "PositionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeePerformer_PerformersPerformerId",
+                name: "IX_EmployeePerformer_PerformersId",
                 table: "EmployeePerformer",
-                column: "PerformersPerformerId");
+                column: "PerformersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_PositionId",

@@ -1,8 +1,7 @@
 ﻿namespace WebApiProject.ModelsDTO
 {
-    public class CustomerDTO
+    public class CustomerInputDTO
     {
-        public string Id { get; init; }
         public string CustomerName { get; init; }
         public string EdpouCode { get; init; }
         public string FirstName { get; init; }

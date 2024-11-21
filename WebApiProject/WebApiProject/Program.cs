@@ -9,12 +9,18 @@ using WebApiProject.Controllers;
 using Microsoft.OpenApi.Models;
 using System.Data;
 using Microsoft.OpenApi.Any;
-using WebApiProject.ModelsDTO;
+using DataConnectorLibraryProject.Serializers;
+using MongoDB.Bson.Serialization;
+using WebApiProject.ExtendSwager;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -25,25 +31,13 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<SqlDataConnectorDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionForSqlDb")));
 //
+MongoDbSerialization.AddCustomMongoDbSerialization();
 var mongoSettings = builder.Configuration.GetSection("MongoDBSettings").Get<MongoDBSettings>();
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDBSettings"));
-//var mongoSettings = builder.Configuration.GetSection("MongoDBSettings").Get<MongoDBSettings>();
+
 
 builder.Services.AddDbContext<MongoDataConnectorDbContext>(options =>
-    options.UseMongoDB(mongoSettings.AtlaURI ?? "", mongoSettings.DatabaseName ?? "")); 
-
-
-/*builder.Services.AddDbContext<MongoDataConnectorDbContext>(options =>
-{
-    // Use the service provider to access the required settings or services
-    var serviceProvider = builder.Services.BuildServiceProvider();
-    var mongoSettings = serviceProvider.GetRequiredService<IOptions<MongoDBSettings>>().Value;
-
-    var client = new MongoClient(mongoSettings.AtlasURI);
-    var database = client.GetDatabase(mongoSettings.DatabaseName);
-
-    options.UseMongoDB(client, database.DatabaseNamespace.DatabaseName);
-});*/
+    options.UseMongoDB(mongoSettings.AtlaURI ?? "", mongoSettings.DatabaseName ?? ""));
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

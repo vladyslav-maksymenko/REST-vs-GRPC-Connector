@@ -24,11 +24,11 @@ namespace DataConnectorLibraryProject.Migrations
 
             modelBuilder.Entity("CustomerEmployee", b =>
                 {
-                    b.Property<Guid>("CustomersId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CustomersId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("EmployeesId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("EmployeesId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CustomersId", "EmployeesId");
 
@@ -39,10 +39,8 @@ namespace DataConnectorLibraryProject.Migrations
 
             modelBuilder.Entity("DataConnectorLibraryProject.Models.Customer", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newsequentialid()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CustomerName")
                         .IsRequired()
@@ -64,8 +62,9 @@ namespace DataConnectorLibraryProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PositionId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PositionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -76,10 +75,8 @@ namespace DataConnectorLibraryProject.Migrations
 
             modelBuilder.Entity("DataConnectorLibraryProject.Models.Employee", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newsequentialid()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -97,8 +94,9 @@ namespace DataConnectorLibraryProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PositionId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PositionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -109,10 +107,8 @@ namespace DataConnectorLibraryProject.Migrations
 
             modelBuilder.Entity("DataConnectorLibraryProject.Models.Equipment", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newsequentialid()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EquipmentName")
                         .IsRequired()
@@ -141,8 +137,9 @@ namespace DataConnectorLibraryProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("VehicleId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("VehicleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -153,10 +150,8 @@ namespace DataConnectorLibraryProject.Migrations
 
             modelBuilder.Entity("DataConnectorLibraryProject.Models.Performer", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newsequentialid()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EdpouCode")
                         .IsRequired()
@@ -173,10 +168,8 @@ namespace DataConnectorLibraryProject.Migrations
 
             modelBuilder.Entity("DataConnectorLibraryProject.Models.Position", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newsequentialid()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PositionName")
                         .IsRequired()
@@ -189,22 +182,23 @@ namespace DataConnectorLibraryProject.Migrations
 
             modelBuilder.Entity("DataConnectorLibraryProject.Models.ProvidedService", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newsequentialid()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ExecutionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("PerformerId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PerformerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("ServiceId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("ServiceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("VehicleId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("VehicleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -219,10 +213,8 @@ namespace DataConnectorLibraryProject.Migrations
 
             modelBuilder.Entity("DataConnectorLibraryProject.Models.Service", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newsequentialid()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ServiceName")
                         .IsRequired()
@@ -241,10 +233,8 @@ namespace DataConnectorLibraryProject.Migrations
 
             modelBuilder.Entity("DataConnectorLibraryProject.Models.TypeVehicle", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newsequentialid()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CustomerName")
                         .IsRequired()
@@ -257,17 +247,16 @@ namespace DataConnectorLibraryProject.Migrations
 
             modelBuilder.Entity("DataConnectorLibraryProject.Models.Vehicle", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newsequentialid()");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("BrandVehicle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ExecutionDate")
                         .HasColumnType("datetime2");
@@ -280,8 +269,9 @@ namespace DataConnectorLibraryProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TypeVehicleId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("TypeVehicleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -294,11 +284,11 @@ namespace DataConnectorLibraryProject.Migrations
 
             modelBuilder.Entity("EmployeePerformer", b =>
                 {
-                    b.Property<Guid>("EmployeesId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("EmployeesId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("PerformersId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PerformersId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("EmployeesId", "PerformersId");
 

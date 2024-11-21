@@ -10,11 +10,16 @@ namespace WebApiProject.MappingData
         {
 
             CreateMap<Customer, CustomerDTO>();
+
             CreateMap<CustomerDTO, Customer>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForMember(dest => dest.Position, opt => opt.Ignore())
-                .ForMember(dest => dest.Employees, opt => opt.Ignore())
-                .ForMember(dest => dest.Vehicles, opt => opt.Ignore());
+           .ForMember(dest => dest.EmployeeId, opt => opt.Ignore())
+           .ForMember(dest => dest.Position, opt => opt.Ignore())
+           .ForMember(dest => dest.Employees, opt => opt.Ignore())
+           .ForMember(dest => dest.Vehicles, opt => opt.Ignore());
+
+            CreateMap<CustomerInputDTO, Customer>();
+
+
 
         }
     }

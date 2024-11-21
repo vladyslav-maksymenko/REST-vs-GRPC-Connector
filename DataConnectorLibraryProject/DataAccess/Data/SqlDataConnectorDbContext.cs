@@ -22,7 +22,8 @@ namespace DataConnectorLibraryProject.DataAccess.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            SetupAutoGenerationEntityIds(modelBuilder);
+            SetupPrimaryKey(modelBuilder);
+            //SetupAutoGenerationEntityIds(modelBuilder);
 
             modelBuilder.Entity<Employee>()
                 .HasOne(x => x.Position)
@@ -79,6 +80,7 @@ namespace DataConnectorLibraryProject.DataAccess.Data
                 .WithMany(x => x.ProvidedServices)
                 .HasForeignKey(x => x.PerformerId)
                 .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Customer>().Ignore(x => x.EmployeeId);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -88,7 +90,20 @@ namespace DataConnectorLibraryProject.DataAccess.Data
             }
         }
 
-        private void SetupAutoGenerationEntityIds(ModelBuilder modelBuilder)
+        private void SetupPrimaryKey(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Customer>().HasKey(c => c.Id);
+            modelBuilder.Entity<Employee>().HasKey(e => e.Id);
+            modelBuilder.Entity<Performer>().HasKey(p => p.Id);
+            modelBuilder.Entity<Position>().HasKey(p => p.Id);
+            modelBuilder.Entity<ProvidedService>().HasKey(ps => ps.Id);
+            modelBuilder.Entity<Service>().HasKey(s => s.Id);
+            modelBuilder.Entity<TypeVehicle>().HasKey(tv => tv.Id);
+            modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
+            modelBuilder.Entity<Equipment>().HasKey(eq => eq.Id);
+        }
+
+        /*private void SetupAutoGenerationEntityIds(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Customer>()
                 .Property(c => c.Id)
@@ -126,6 +141,6 @@ namespace DataConnectorLibraryProject.DataAccess.Data
                 .Property(c => c.Id)
                 .HasDefaultValueSql("newsequentialid()");
         
-        }
+        }*/
     }
 }

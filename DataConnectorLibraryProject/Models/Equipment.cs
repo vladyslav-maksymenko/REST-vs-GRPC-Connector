@@ -1,10 +1,12 @@
-﻿using DataConnectorLibraryProject.Interface;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using DataConnectorLibraryProject.Interface;
 
 namespace DataConnectorLibraryProject.Models
 {
     public class Equipment : IEntity
     {
-        public Guid Id { get; set; } 
+        public string Id { get; set; } 
         public string EquipmentName { get; set; }
         public double PriceEquipment { get; set; }
         public string PriceEquipmentWithPdv { get; set; }
@@ -12,7 +14,7 @@ namespace DataConnectorLibraryProject.Models
         public string IMEIDRP { get; set; }
         public string ModelDRP { get; set; }
         public string ModelRT { get; set; }
-        public Guid VehicleId { get; set; }
+        public string VehicleId { get; set; }
         public Vehicle Vehicle { get; set; }
 
     }

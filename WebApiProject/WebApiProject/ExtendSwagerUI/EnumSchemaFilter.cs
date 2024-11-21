@@ -2,7 +2,7 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace WebApiProject.ModelsDTO
+namespace WebApiProject.ExtendSwager
 {
     public class EnumSchemaFilter : ISchemaFilter
     {
