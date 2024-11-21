@@ -8,14 +8,10 @@ namespace WebApiProject.ExtendSwager
     {
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {
-            if (context.Type == typeof(DbType))
+            if (context.Type == typeof(DbContextType))
             {
                 schema.Type = "string";
-                schema.Enum = new List<IOpenApiAny>
-            {
-                new OpenApiString("sql"),
-                new OpenApiString("mongo")
-            };
+                schema.Enum = new List<IOpenApiAny> { new OpenApiString("sql"), new OpenApiString("mongo") };
             }
         }
     }

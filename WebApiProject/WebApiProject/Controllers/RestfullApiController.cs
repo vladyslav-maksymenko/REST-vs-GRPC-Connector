@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using DataConnectorLibraryProject.DatabaseStrategy;
 using DataConnectorLibraryProject.Interface;
-using DataConnectorLibraryProject.Models;
+using DataConnectorLibraryProject.Models.ModelsDto;
+using DataConnectorLibraryProject.Models.ResponseModels;
+using DataConnectorLibraryProject.Models.ServerSideModels;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using System.Data;
 using System.Diagnostics;
 using WebApiProject.ExtendSwager;
-using WebApiProject.ModelsDTO;
 
 namespace WebApiProject.Controllers
 {
@@ -29,8 +31,8 @@ namespace WebApiProject.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllCustomers()
         {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
+            var totalStopwatch = new Stopwatch();
+            totalStopwatch.Start();
 
             unitOfWork.SwitchContext(unitOfWork.DbContexts.Sql());
 
@@ -52,15 +54,15 @@ namespace WebApiProject.Controllers
             mongoStopwatch.Stop();
 
 
-            var resultCustomerList = customersFromMongo.Concat(customersFromSqlDb).Select(x => mapper.Map<Customer, CustomerDTO>(x)).ToArray();
+            var resultCustomerList = customersFromMongo.Concat(customersFromSqlDb).Select(x => mapper.Map<Customer, CustomerDto>(x)).ToArray();
 
-            stopwatch.Stop();
+            totalStopwatch.Stop();
 
-            var response = new ResponseDTO<IReadOnlyCollection<CustomerDTO>>(
+            var response = new ResponseDto<IReadOnlyCollection<CustomerDto>>(
                 resultCustomerList,
                 new ExecutionMetrics(FormatElapsedTime(sqlStopwatch.ElapsedMilliseconds),
                 FormatElapsedTime(mongoStopwatch.ElapsedMilliseconds),
-                FormatElapsedTime(stopwatch.ElapsedMilliseconds)));
+                FormatElapsedTime(totalStopwatch.ElapsedMilliseconds)));
 
             return Ok(response);
         }
@@ -72,8 +74,8 @@ namespace WebApiProject.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCustomerById(string id)
         {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
+            var totalStopwatch = new Stopwatch();
+            totalStopwatch.Start();
 
 
             unitOfWork.SwitchContext(unitOfWork.DbContexts.Sql());
@@ -87,15 +89,15 @@ namespace WebApiProject.Controllers
 
             if(customersFromSqlDb != null)
             {
-                var customerDto = mapper.Map<Customer, CustomerDTO>(customersFromSqlDb);
-                stopwatch.Stop();
+                var customerDto = mapper.Map<Customer, CustomerDto>(customersFromSqlDb);
+                totalStopwatch.Stop();
 
-                return Ok(new ResponseDTO<CustomerDTO>(
+                return Ok(new ResponseDto<CustomerDto>(
                    customerDto,
                    Metrics: new ExecutionMetrics(
                        FormatElapsedTime(sqlStopwatch.ElapsedMilliseconds),
                        null,
-                       FormatElapsedTime(stopwatch.ElapsedMilliseconds)
+                       FormatElapsedTime(totalStopwatch.ElapsedMilliseconds)
                    )));
             }
 
@@ -107,20 +109,20 @@ namespace WebApiProject.Controllers
             var customerFromMongo = await customerMongoRepository.GetByIdAsync(id);
             mongoStopwatch.Stop();
 
-            var customerDtoFromMongo = mapper.Map<Customer, CustomerDTO>(customerFromMongo);
-            stopwatch.Stop();
+            var customerDtoFromMongo = mapper.Map<Customer, CustomerDto>(customerFromMongo);
+            totalStopwatch.Stop();
 
             if (customerFromMongo == null)
             {
                 return NotFound(new { Message = $"Customer with ID '{id}' was not found in either SQL or MongoDB." });
             }
 
-            return Ok(new ResponseDTO<CustomerDTO>(
+            return Ok(new ResponseDto<CustomerDto>(
                    customerDtoFromMongo,
                    Metrics: new ExecutionMetrics(
                        null,
                        FormatElapsedTime(mongoStopwatch.ElapsedMilliseconds),
-                       FormatElapsedTime(stopwatch.ElapsedMilliseconds)
+                       FormatElapsedTime(totalStopwatch.ElapsedMilliseconds)
                    )));
         }
 
@@ -128,29 +130,37 @@ namespace WebApiProject.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddCustomer([FromBody] CustomerInputDTO customerInputData,[FromQuery] DbType dbType = DbType.Sql)
+        public async Task<IActionResult> AddCustomer([FromBody] CustomerInputDto customerInputData,[FromQuery] DbContextType dbType = DbContextType.Sql)
         {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
+            var totalStopwatch = new Stopwatch();
+            totalStopwatch.Start();
             if (customerInputData == null)
             {
                return BadRequest(new { Message = "Customer data is required." });
             }
 
             var customerInputForDb = mapper.Map<Customer>(customerInputData);
-            customerInputForDb.Id = dbType == DbType.Mongo
+            customerInputForDb.Id = dbType == DbContextType.Mongo
                ? ObjectId.GenerateNewId().ToString()
                : Guid.NewGuid().ToString();
 
             unitOfWork.SwitchContext(IndicateContext(dbType));
+
+            var dbStopwatch = new Stopwatch();
+
             var customerRepository = unitOfWork.GetRepository<Customer>();
 
+            dbStopwatch.Start();
             await customerRepository.AddAsync(customerInputForDb);
+            dbStopwatch.Stop();
 
             await unitOfWork.SaveShangesAsync();
 
-            stopwatch.Stop();
-            return Ok(customerInputForDb.Id);
+            totalStopwatch.Stop();
+
+            var metrics = GetExecutionMetrics(dbType, dbStopwatch.ElapsedMilliseconds, totalStopwatch.ElapsedMilliseconds);
+
+            return Ok(new ResponseDto<Customer>(customerInputForDb,Metrics: metrics));
         }
 
         [HttpPut("update-customer/{id}")]
@@ -158,54 +168,48 @@ namespace WebApiProject.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateCustomerById(string id, [FromBody] CustomerInputDTO customerInputData)
+        public async Task<IActionResult> UpdateCustomerById(string id, [FromBody] CustomerInputDto customerInputData)
         {
             if (customerInputData == null)
             {
                 return BadRequest(new { Message = "Customer data is required." });
             }
 
-            var mapCustomer = mapper.Map<Customer>(customerInputData);
+            var totalStopwatch = new Stopwatch();
+            totalStopwatch.Start();
 
-            unitOfWork.SwitchContext(IndicateContext());
 
-            var customerRepository = unitOfWork.GetRepository<Customer>();
-            var customerFromSqlDb = await customerRepository.GetByIdAsync(id);
+            var sqlUpdateMetrics = await UpdateCustomerInDatabase(id, DbContextType.Sql, customerInputData);
 
-            unitOfWork.SwitchContext(unitOfWork.DbContexts.Mongo());
-            var customerMongoRepository = unitOfWork.GetRepository<Customer>();
-            var customerFromMongoDb = await customerMongoRepository.GetByIdAsync(id);
+            var mongoUpdateMetrics = await UpdateCustomerInDatabase(id, DbContextType.Mongo, customerInputData);
 
-            if (customerFromSqlDb == null && customerFromMongoDb == null)
+            totalStopwatch.Stop();
+
+            if (sqlUpdateMetrics == null && mongoUpdateMetrics == null)
             {
                 return NotFound(new { Message = "Customer not found." });
             }
 
-
-            if (customerFromSqlDb != null)
+            return Ok(new
             {
-                var updated =  mapper.Map<CustomerInputDTO, Customer>(customerInputData, customerFromSqlDb);
-                await customerRepository.UpdateAsync(updated);
-                await unitOfWork.SaveShangesAsync();
-            }
-
-            if (customerFromMongoDb != null)
-            {
-                unitOfWork.SwitchContext(unitOfWork.DbContexts.Mongo());
-                var updated = mapper.Map<CustomerInputDTO, Customer>(customerInputData, customerFromMongoDb);
-                await customerMongoRepository.UpdateAsync(customerFromMongoDb);
-                await unitOfWork.SaveShangesAsync();
-            }
-
-            return Ok(new { Message = "Customer updated successfully." });
+                Message = "Customer updated successfully.",
+                Metrics = new ExecutionMetrics(
+                    SqlQueryTime: sqlUpdateMetrics?.SqlQueryTime,
+                    MongoQueryTime: mongoUpdateMetrics?.MongoQueryTime,
+                    TotalExecutionTime: FormatElapsedTime(totalStopwatch.ElapsedMilliseconds)
+                )
+            });
         }
 
         [HttpDelete("delete-customer/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteCustomerById(string id, [FromQuery] DbType dbType = DbType.Sql)
+        public async Task<IActionResult> DeleteCustomerById(string id, [FromQuery] DbContextType dbType = DbContextType.Sql)
         {
+            var totalStopwatch = new Stopwatch();
+            totalStopwatch.Start();
+
             unitOfWork.SwitchContext(IndicateContext(dbType));
 
             var customerRepository = unitOfWork.GetRepository<Customer>();
@@ -214,21 +218,31 @@ namespace WebApiProject.Controllers
 
             if (getCustomerFromDatabase == null)
             {
-                return NotFound(new { Message = "Customer not found." });
+                return NotFound(new { Message = $"Customer with ID '{id}' not found in {dbType} database." });
             }
-
+            var deleteStopwatch = new Stopwatch();
+            deleteStopwatch.Start();
             await customerRepository.DeleteAsync(getCustomerFromDatabase.Id);
+            deleteStopwatch.Stop();
+
             await unitOfWork.SaveShangesAsync();
 
-            return NoContent();
+            totalStopwatch.Stop();
+            var metrics = GetExecutionMetrics(dbType, deleteStopwatch.ElapsedMilliseconds, totalStopwatch.ElapsedMilliseconds);
+
+            return Ok(new
+            {
+                Message = $"Customer with ID '{id}' deleted successfully.",
+                Metrics = metrics
+            });
         }
 
-        private IDatabaseStrategy IndicateContext(DbType dbType = DbType.Sql)
+        private IDatabaseStrategy IndicateContext(DbContextType dbType = DbContextType.Sql)
         {
             return dbType switch
             {
-                DbType.Sql => unitOfWork.DbContexts.Sql(),
-                DbType.Mongo => unitOfWork.DbContexts.Mongo(),
+                DbContextType.Sql => unitOfWork.DbContexts.Sql(),
+                DbContextType.Mongo => unitOfWork.DbContexts.Mongo(),
                 _ => throw new ArgumentException($"Unsupported database type: {dbType}", nameof(dbType))
             };
         }
@@ -237,6 +251,42 @@ namespace WebApiProject.Controllers
         {
             var time = TimeSpan.FromMilliseconds(milliseconds);
             return $"{time.Minutes:D2}:{time.Seconds:D2}.{time.Milliseconds:D3}";
+        }
+
+        private ExecutionMetrics GetExecutionMetrics(DbContextType dbType, long operationTimeMs, long totalExecutionTimeMs)
+        {
+           return dbType switch
+            {
+                DbContextType.Sql => new ExecutionMetrics(SqlQueryTime: FormatElapsedTime(operationTimeMs), TotalExecutionTime: FormatElapsedTime(totalExecutionTimeMs)),
+                DbContextType.Mongo => new ExecutionMetrics(MongoQueryTime: FormatElapsedTime(operationTimeMs), TotalExecutionTime: FormatElapsedTime(totalExecutionTimeMs)),
+                _ => throw new ArgumentOutOfRangeException(nameof(dbType), dbType, "Unsupported database type.")
+            };
+        }
+
+        private async Task<ExecutionMetrics?> UpdateCustomerInDatabase(string id, DbContextType dbType, CustomerInputDto customerInputData)
+        {
+            unitOfWork.SwitchContext(IndicateContext(dbType));
+            var customerRepository = unitOfWork.GetRepository<Customer>();
+            var existingCustomer = await customerRepository.GetByIdAsync(id);
+
+            if (existingCustomer == null)
+            {
+                return null;
+            }
+
+            var mappedCustomer = mapper.Map<CustomerInputDto, Customer>(customerInputData, existingCustomer);
+
+            var updateStopwatch = new Stopwatch();
+            updateStopwatch.Start();
+            await customerRepository.UpdateAsync(mappedCustomer);
+            updateStopwatch.Stop();
+
+            await unitOfWork.SaveShangesAsync();
+
+            return new ExecutionMetrics(
+                SqlQueryTime: dbType == DbContextType.Sql ? FormatElapsedTime(updateStopwatch.ElapsedMilliseconds) : null,
+                MongoQueryTime: dbType == DbContextType.Mongo ? FormatElapsedTime(updateStopwatch.ElapsedMilliseconds) : null
+            );
         }
     }
 }

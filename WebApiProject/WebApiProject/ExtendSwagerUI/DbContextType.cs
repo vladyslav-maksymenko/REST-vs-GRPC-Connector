@@ -2,7 +2,7 @@
 
 namespace WebApiProject.ExtendSwager
 {
-    public enum DbType
+    public enum DbContextType
     {
         [EnumMember(Value = "sql")]
         Sql = 0,

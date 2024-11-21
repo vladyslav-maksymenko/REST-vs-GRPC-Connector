@@ -1,4 +1,4 @@
-using DataConnectorLibraryProject.Models;
+using DataConnectorLibraryProject.Models.ServerSideModels;
 using MongoDB.Bson.Serialization;
 
 namespace DataConnectorLibraryProject.Serializers
@@ -10,7 +10,7 @@ namespace DataConnectorLibraryProject.Serializers
             BsonClassMap.RegisterClassMap<Customer>(cm =>
             {
                 cm.AutoMap();
-                cm.MapIdField(g => g.Id).SetSerializer(new GuidObjectIdSerializer());
+                cm.MapIdField(g => g.Id).SetSerializer(new ObjectIdSerializer());
             });
         }
     }

@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using DataConnectorLibraryProject.Interface;
+﻿using DataConnectorLibraryProject.Interface;
 
-namespace DataConnectorLibraryProject.Models
+namespace DataConnectorLibraryProject.Models.ServerSideModels
 {
     public class Employee : IEntity
     {

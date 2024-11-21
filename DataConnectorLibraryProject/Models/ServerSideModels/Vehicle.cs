@@ -1,9 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using DataConnectorLibraryProject.Interface;
+﻿using DataConnectorLibraryProject.Interface;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace DataConnectorLibraryProject.Models
+namespace DataConnectorLibraryProject.Models.ServerSideModels
 {
     public class Vehicle : IEntity
     {

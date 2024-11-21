@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace DataConnectorLibraryProject.Serializers
 {
-    public class GuidObjectIdSerializer : SerializerBase<string>
+    public class ObjectIdSerializer : SerializerBase<string>
     {
         public override string Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
         {

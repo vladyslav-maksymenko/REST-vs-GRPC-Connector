@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.EntityFrameworkCore;
 
-namespace DataConnectorLibraryProject.Models
+namespace DataConnectorLibraryProject.Models.ServerSideModels
 {
     [Collection("Customer")]
     public class Customer : IEntity

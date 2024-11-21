@@ -1,4 +1,4 @@
-﻿using DataConnectorLibraryProject.Models;
+﻿using DataConnectorLibraryProject.Models.ServerSideModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataConnectorLibraryProject.DataAccess.Data
@@ -23,7 +23,6 @@ namespace DataConnectorLibraryProject.DataAccess.Data
         {
             base.OnModelCreating(modelBuilder);
             SetupPrimaryKey(modelBuilder);
-            //SetupAutoGenerationEntityIds(modelBuilder);
 
             modelBuilder.Entity<Employee>()
                 .HasOne(x => x.Position)
@@ -102,45 +101,5 @@ namespace DataConnectorLibraryProject.DataAccess.Data
             modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
             modelBuilder.Entity<Equipment>().HasKey(eq => eq.Id);
         }
-
-        /*private void SetupAutoGenerationEntityIds(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Customer>()
-                .Property(c => c.Id)
-                .HasDefaultValueSql("newsequentialid()");
-            
-            modelBuilder.Entity<Employee>()
-                .Property(c => c.Id)
-                .HasDefaultValueSql("newsequentialid()");
-            
-            modelBuilder.Entity<Performer>()
-                .Property(c => c.Id)
-                .HasDefaultValueSql("newsequentialid()");
-            
-            modelBuilder.Entity<Position>()
-                .Property(c => c.Id)
-                .HasDefaultValueSql("newsequentialid()");
-            
-            modelBuilder.Entity<ProvidedService>()
-                .Property(c => c.Id)
-                .HasDefaultValueSql("newsequentialid()");
-            
-            modelBuilder.Entity<Service>()
-                .Property(c => c.Id)
-                .HasDefaultValueSql("newsequentialid()");
-            
-            modelBuilder.Entity<TypeVehicle>()
-                .Property(c => c.Id)
-                .HasDefaultValueSql("newsequentialid()");
-            
-            modelBuilder.Entity<Vehicle>()
-                .Property(c => c.Id)
-                .HasDefaultValueSql("newsequentialid()");
-            
-            modelBuilder.Entity<Equipment>()
-                .Property(c => c.Id)
-                .HasDefaultValueSql("newsequentialid()");
-        
-        }*/
     }
 }

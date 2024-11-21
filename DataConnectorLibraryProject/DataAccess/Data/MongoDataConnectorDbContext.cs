@@ -1,6 +1,5 @@
-﻿using DataConnectorLibraryProject.Models;
+﻿using DataConnectorLibraryProject.Models.ServerSideModels;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
 using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace DataConnectorLibraryProject.DataAccess.Data
@@ -24,12 +23,6 @@ namespace DataConnectorLibraryProject.DataAccess.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Customer>().ToCollection("Customer");
-            // modelBuilder.Entity<Customer>()
-            //     .Ignore(x => x.Position)
-            //     .Ignore(x => x.Employees)
-            //     .Ignore(x => x.Vehicles);
-                
-                
             modelBuilder.Entity<Employee>().ToCollection("employee");
             modelBuilder.Entity<Equipment>().ToCollection("equipment");
             modelBuilder.Entity<Performer>().ToCollection("performer");
