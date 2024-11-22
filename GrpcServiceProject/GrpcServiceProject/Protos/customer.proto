@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option csharp_namespace = "WebApiProject.Protos";
+
+package customer;
+
+message GrpcCustomerDto {
+  string id = 1;
+  string customerName = 2;
+  string edpouCode = 3;
+  string firstName = 4;
+  string lastName = 5;
+  string patronymic = 6;
+  string positionId = 7;
+}
+
+message ExecutionMetricsGrpc {
+  optional string sqlQueryTime = 1;
+  optional string mongoQueryTime = 2;
+  optional string totalExecutionTime = 3;
+}
+
+message EmptyRequest {}
+
+message GetAllCustomersResponse {
+  repeated GrpcCustomerDto customers = 1;
+  ExecutionMetricsGrpc metrics = 2;
+}
+
+message GetCustomerByIdRequest {
+  string id = 1;
+}
+
+message GetCustomerByIdResponse {
+  GrpcCustomerDto customer = 1;
+  ExecutionMetricsGrpc metrics = 2;
+}
+
+service CustomerService {
+  rpc GetAllCustomers (EmptyRequest) returns (GetAllCustomersResponse);
+  rpc GetCustomerById (GetCustomerByIdRequest) returns (GetCustomerByIdResponse);
+}
