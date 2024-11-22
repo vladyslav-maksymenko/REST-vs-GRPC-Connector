@@ -1,10 +1,5 @@
-using Microsoft.EntityFrameworkCore;
-using DataConnectorLibraryProject.Interface;
-using DataConnectorLibraryProject.UnitOfWork;
-using DataConnectorLibraryProject.DataAccess.Data;
-using DataConnectorLibraryProject.Serializers;
 using WebApiProject.ExtendSwager;
-using DataConnectorLibraryProject.Settings.Mongo;
+using DataConnectorLibraryProject.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,21 +11,8 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => { c.SchemaFilter<EnumSchemaFilter>(); });
 
-// SQL Server Configuration
-builder.Services.AddDbContext<SqlDataConnectorDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionForSqlDb")));
-//
-MongoDbSerialization.AddCustomMongoDbSerialization();
-var mongoSettings = builder.Configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
-builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
-
-
-builder.Services.AddDbContext<MongoDataConnectorDbContext>(options =>
-    options.UseMongoDB(mongoSettings.AtlasUri ?? "", mongoSettings.DatabaseName ?? ""));
-
-
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddDataConnectors(builder.Configuration);
+builder.Services.AddCustomMapping();
 
 var app = builder.Build();
 
