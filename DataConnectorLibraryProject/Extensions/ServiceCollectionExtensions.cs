@@ -12,16 +12,18 @@ namespace DataConnectorLibraryProject.Extensions
     {
         public static IServiceCollection AddDataConnectors(this IServiceCollection services, IConfiguration configuration)
         {
+            
             // SQL Server Configuration.
             services.AddDbContext<SqlDataConnectorDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("ConnectionForSqlDb")));
-            
-            //Mongo Server Configuration.
+
+            // MongoDB Configuration.
             MongoDbSerialization.AddCustomMongoDbSerialization();
-            var mongoSettings = configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
-            
+            var mongoSettings = new MongoDbSettings();
+            configuration.GetSection("MongoDbSettings").Bind(mongoSettings);
+            //services.Configure<MongoDbSettings>(configuration.GetSection("MongoDbSettings")); 
             services.AddDbContext<MongoDataConnectorDbContext>(options =>
-                options.UseMongoDB(mongoSettings?.AtlasUri ?? string.Empty, mongoSettings?.DatabaseName ?? string.Empty));
+                options.UseMongoDB(mongoSettings.AtlasUri ?? string.Empty, mongoSettings.DatabaseName ?? string.Empty));
             
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 
