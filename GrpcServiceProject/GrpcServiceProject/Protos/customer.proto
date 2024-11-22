@@ -14,6 +14,15 @@ message GrpcCustomerDto {
   string positionId = 7;
 }
 
+message InputCustomerDto {
+  string customerName = 1;
+  string edpouCode = 2;
+  string firstName = 3;
+  string lastName = 4;
+  string patronymic = 5;
+  string positionId = 6;
+}
+
 message ExecutionMetricsGrpc {
   optional string sqlQueryTime = 1;
   optional string mongoQueryTime = 2;
@@ -36,7 +45,40 @@ message GetCustomerByIdResponse {
   ExecutionMetricsGrpc metrics = 2;
 }
 
+message AddCustomerRequest {
+  InputCustomerDto customer = 1;
+  string dbType = 2; // "sql" or "mongo"
+}
+
+message AddCustomerResponse {
+  GrpcCustomerDto customer = 1;
+  ExecutionMetricsGrpc metrics = 2;
+}
+
+message UpdateCustomerRequest {
+  string id = 1;
+  InputCustomerDto customer = 2;
+}
+
+message UpdateCustomerResponse {
+  string message = 1;
+  ExecutionMetricsGrpc metrics = 2;
+}
+
+message DeleteCustomerRequest {
+  string id = 1;
+  string dbType = 2; // "sql" or "mongo"
+}
+
+message DeleteCustomerResponse {
+  string message = 1;
+  ExecutionMetricsGrpc metrics = 2;
+}
+
 service CustomerService {
   rpc GetAllCustomers (EmptyRequest) returns (GetAllCustomersResponse);
   rpc GetCustomerById (GetCustomerByIdRequest) returns (GetCustomerByIdResponse);
+  rpc AddCustomer (AddCustomerRequest) returns (AddCustomerResponse);
+  rpc UpdateCustomerById (UpdateCustomerRequest) returns (UpdateCustomerResponse);
+  rpc DeleteCustomerById (DeleteCustomerRequest) returns (DeleteCustomerResponse);
 }
