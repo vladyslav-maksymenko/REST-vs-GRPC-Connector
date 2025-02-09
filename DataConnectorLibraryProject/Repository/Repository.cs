@@ -22,7 +22,6 @@ namespace DataConnectorLibraryProject.Repository
 
         public async Task<IList<TEntity>> GetAllAsync()
         {
-            
             var query = dbSet.AsQueryable();
             if (dbContext is SqlDataConnectorDbContext)
             {

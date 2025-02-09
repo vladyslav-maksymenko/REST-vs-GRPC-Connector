@@ -1,8 +1,9 @@
-﻿using Microsoft.OpenApi.Any;
+﻿using DataConnectorLibraryProject.Enums;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace WebApiProject.ExtendSwager
+namespace WebApiProject.ExtendSwagerUI
 {
     public class EnumSchemaFilter : ISchemaFilter
     {

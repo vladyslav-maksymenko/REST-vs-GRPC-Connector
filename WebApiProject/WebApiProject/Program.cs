@@ -1,5 +1,5 @@
-using WebApiProject.ExtendSwager;
 using DataConnectorLibraryProject.Extensions;
+using WebApiProject.ExtendSwagerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 

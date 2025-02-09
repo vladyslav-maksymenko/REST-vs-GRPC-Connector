@@ -1,6 +1,8 @@
 using DataConnectorLibraryProject.DataAccess.Data;
 using DataConnectorLibraryProject.Interface;
 using DataConnectorLibraryProject.Serializers;
+using DataConnectorLibraryProject.ServiceInterfaces;
+using DataConnectorLibraryProject.Services;
 using DataConnectorLibraryProject.Settings.Mongo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +14,6 @@ namespace DataConnectorLibraryProject.Extensions
     {
         public static IServiceCollection AddDataConnectors(this IServiceCollection services, IConfiguration configuration)
         {
-            
             // SQL Server Configuration.
             services.AddDbContext<SqlDataConnectorDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("ConnectionForSqlDb")));
@@ -26,6 +27,7 @@ namespace DataConnectorLibraryProject.Extensions
                 options.UseMongoDB(mongoSettings.AtlasUri ?? string.Empty, mongoSettings.DatabaseName ?? string.Empty));
             
             services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+            services.AddScoped<ICustomerService, CustomerService>();
 
             return services;
         }
