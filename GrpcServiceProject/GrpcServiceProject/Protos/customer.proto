@@ -4,8 +4,13 @@ option csharp_namespace = "WebApiProject.Protos";
 
 package customer;
 
+enum DbContextType {
+  SQL = 0;
+  MONGO = 1;
+}
+
 message GrpcCustomerDto {
-  string id = 1;
+  optional string id = 1;
   string customerName = 2;
   string edpouCode = 3;
   string firstName = 4;
@@ -47,7 +52,7 @@ message GetCustomerByIdResponse {
 
 message AddCustomerRequest {
   InputCustomerDto customer = 1;
-  string dbType = 2; // "sql" or "mongo"
+  DbContextType dbType = 2;
 }
 
 message AddCustomerResponse {
@@ -61,24 +66,22 @@ message UpdateCustomerRequest {
 }
 
 message UpdateCustomerResponse {
-  string message = 1;
-  ExecutionMetricsGrpc metrics = 2;
+  ExecutionMetricsGrpc metrics = 1;
 }
 
 message DeleteCustomerRequest {
   string id = 1;
-  string dbType = 2; // "sql" or "mongo"
+  DbContextType dbType = 2;
 }
 
 message DeleteCustomerResponse {
-  string message = 1;
-  ExecutionMetricsGrpc metrics = 2;
+  ExecutionMetricsGrpc metrics = 1;
 }
 
 service CustomerService {
   rpc GetAllCustomers (EmptyRequest) returns (GetAllCustomersResponse);
   rpc GetCustomerById (GetCustomerByIdRequest) returns (GetCustomerByIdResponse);
   rpc AddCustomer (AddCustomerRequest) returns (AddCustomerResponse);
-  rpc UpdateCustomerById (UpdateCustomerRequest) returns (UpdateCustomerResponse);
-  rpc DeleteCustomerById (DeleteCustomerRequest) returns (DeleteCustomerResponse);
+  rpc UpdateCustomer (UpdateCustomerRequest) returns (UpdateCustomerResponse);
+  rpc DeleteCustomer (DeleteCustomerRequest) returns (DeleteCustomerResponse);
 }
