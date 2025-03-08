@@ -21,8 +21,8 @@ public class GrpcCustomerService : CustomerService.CustomerServiceBase
         {
             Metrics = new ExecutionMetricsGrpc
             {
-                SqlQueryTime = serviceResponse.Metrics?.SqlQueryTime,
-                MongoQueryTime = serviceResponse.Metrics?.MongoQueryTime,
+                SqlQueryTime = serviceResponse.Metrics?.SqlQueryTime ?? string.Empty,
+                MongoQueryTime = serviceResponse.Metrics?.MongoQueryTime ?? string.Empty,
                 TotalExecutionTime = serviceResponse.Metrics?.TotalExecutionTime
             }
         };
@@ -61,8 +61,8 @@ public class GrpcCustomerService : CustomerService.CustomerServiceBase
             },
             Metrics = new ExecutionMetricsGrpc
             {
-                SqlQueryTime = serviceResponse.Metrics?.SqlQueryTime,
-                MongoQueryTime = serviceResponse.Metrics?.MongoQueryTime,
+                SqlQueryTime = serviceResponse.Metrics?.SqlQueryTime ?? string.Empty,
+                MongoQueryTime = serviceResponse.Metrics?.MongoQueryTime ?? string.Empty,
                 TotalExecutionTime = serviceResponse.Metrics?.TotalExecutionTime
             }
         };
@@ -94,8 +94,8 @@ public class GrpcCustomerService : CustomerService.CustomerServiceBase
             },
             Metrics = new ExecutionMetricsGrpc
             {
-                SqlQueryTime = serviceResponse.Metrics?.SqlQueryTime,
-                MongoQueryTime = serviceResponse.Metrics?.MongoQueryTime,
+                SqlQueryTime = serviceResponse.Metrics?.SqlQueryTime ?? string.Empty,
+                MongoQueryTime = serviceResponse.Metrics?.MongoQueryTime ?? string.Empty,
                 TotalExecutionTime = serviceResponse.Metrics?.TotalExecutionTime
             }
         };
@@ -120,8 +120,8 @@ public class GrpcCustomerService : CustomerService.CustomerServiceBase
         {
             Metrics = new ExecutionMetricsGrpc
             {
-                SqlQueryTime = serviceResponse.Metrics?.SqlQueryTime,
-                MongoQueryTime = serviceResponse.Metrics?.MongoQueryTime,
+                SqlQueryTime = serviceResponse.Metrics?.SqlQueryTime ?? string.Empty,
+                MongoQueryTime = serviceResponse.Metrics?.MongoQueryTime ?? string.Empty,
                 TotalExecutionTime = serviceResponse.Metrics?.TotalExecutionTime
             }
         };
@@ -137,8 +137,8 @@ public class GrpcCustomerService : CustomerService.CustomerServiceBase
         {
             Metrics = new ExecutionMetricsGrpc
             {
-                SqlQueryTime = serviceResponse.Metrics?.SqlQueryTime,
-                MongoQueryTime = serviceResponse.Metrics?.MongoQueryTime,
+                SqlQueryTime = serviceResponse.Metrics?.SqlQueryTime ?? string.Empty,
+                MongoQueryTime = serviceResponse.Metrics?.MongoQueryTime ?? string.Empty,
                 TotalExecutionTime = serviceResponse.Metrics?.TotalExecutionTime
             }
         };
